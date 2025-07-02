@@ -2,7 +2,8 @@ import {asyncHandler} from '../utils/asyncHandler.js';
 import {ApiError} from '../utils/ApiError.js';
 import {User} from '../models/user.model.js';
 import {ApiResponse} from '../utils/ApiResponse.js';
-import {uploadOnCloudinary} from '../utils/cloudinary.js'
+import {uploadOnCloudinary} from '../utils/cloudinary.js';
+import jwt from "jsonwebtoken";
 
 const generateAccessAndRefreshTokens=async function(userId){ // to generate both in single method
   try{
@@ -156,6 +157,19 @@ const logoutUser=asyncHandler(async(req,res)=>{
   .clearCookie("accessToken",options)
   .clearCookie("refreshToken",options)
   .json(new ApiResponse(200,{},"User Logged Out"))
+})
+
+const refreshAccessToken=asyncHandler(async(req,res)=>{
+  // after some time access token with user expires, then we match the refresh token with user and in our db, then we send new access token to user and create new refresh token and send both to user and db
+  // time of access< refresh
+  const incommingRefreshToken=req.cookie.refreshToken || req.body.refreshToken
+
+  if(!incommingRefreshToken){
+    throw new ApiError(401,"Unauthorized request")
+  }
+  const decodedToken=jwt.verify(incommingRefreshToken,process.env.REFRESH_TOKEN_SECRET)
+
+  const user=await User.findById(decodedToken?._id)
 })
 
 export {registerUser,loginUser,logoutUser}
