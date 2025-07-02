@@ -49,7 +49,7 @@ const userSchema=new Schema(
 )
 
 userSchema.pre("save",async function(next){  // encrypts the password before saving into the db
-  if(this.isModified("password")) return next(); 
+  if(!this.isModified("password")) return next(); 
   this.password=await bcrypt.hash(this.password,10)
   next()
 })
@@ -68,7 +68,7 @@ userSchema.methods.generateAccessToken=function(){
     },
     process.env.ACCESS_TOKEN_SECRET,
     {
-      expiresIn:ACCESS_TOKEN_EXPIRY,
+      expiresIn:process.env.ACCESS_TOKEN_EXPIRY,
     }
   )
 }
@@ -79,7 +79,7 @@ userSchema.methods.generateRefreshToken=function(){
     },
     process.env.REFRESH_TOKEN_SECRET,
     {
-      expiresIn:REFRESH_TOKEN_EXPIRY,
+      expiresIn:process.env.REFRESH_TOKEN_EXPIRY,
     }
   )
 }
