@@ -5,6 +5,7 @@ import { User } from "../models/user.model.js";
 
 export const verifyJWT=asyncHandler(async(req,_,next)=>{
   try {
+    // we have sent both access and refresh token via cookie, so can match via both
     const token=req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ","")
   
     if(!token){
@@ -12,7 +13,7 @@ export const verifyJWT=asyncHandler(async(req,_,next)=>{
     }
   
     const decodedToken=jwt.decode(token,process.env.ACCESS_TOKEN_SECRET)
-  
+    console.log(decodedToken)
     const user=await User.findById(decodedToken?._id).select("-password -refreshToken")
   
     if(!user){
