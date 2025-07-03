@@ -5,7 +5,7 @@ import { User } from "../models/user.model.js";
 
 export const verifyJWT=asyncHandler(async(req,_,next)=>{
   try {
-    // we have sent both access and refresh token via cookie, so can match via both
+    // we have sent both access and refresh token via cookie, so can match via both but access token is mostly in req.header("Authorization")
     const token=req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ","")
   
     if(!token){
