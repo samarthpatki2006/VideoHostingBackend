@@ -9,7 +9,7 @@ const userSchema=new Schema(
       lowercase:true,
       unique:true,
       trim:true,
-      index:true,
+      index:true, //for optimized searching
     },
     email:{
       type:String,

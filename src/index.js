@@ -1,8 +1,6 @@
 // require ('dotenv').config({path:'./env'})
 import dotenv from "dotenv"
 import connectDB from "./db/index.js";
-import { DB_NAME } from "./constants.js";
-import express from "express";
 import { app } from "./app.js";
 
 
@@ -40,7 +38,7 @@ const app=express()
 (async ()=>{
   try{
     await mongoose.connect(`${process.env.MONGODB_URI}/${DB_NAME}`)
-    app.on("error",(error)=>{
+    app.on("error",(error)=>{ // listens to error
       console.log("ERROR: ",error)
       throw error or process.exit(1)
     })
