@@ -10,6 +10,7 @@ const errorMiddleware = (err, req, res, next) => {
     }
 
     const response = {
+        status:statusCode,
         success: false,
         message,
         errors: err.errors || [],
