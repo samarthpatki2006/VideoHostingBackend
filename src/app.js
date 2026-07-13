@@ -4,7 +4,7 @@ import cookieParser from "cookie-parser";
 import { errorMiddleware } from "./middlewares/error.middleware.js";
 const app=express()
 app.use(cors({
-  origin:"http://localhost:5173",
+  origin:process.env.CORS_ORIGIN,
   credentials:true,
 }))
 app.use(express.json({limit:"16kb"}))
